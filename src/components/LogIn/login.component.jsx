@@ -9,6 +9,9 @@ import {
 import "./login.styles.css"; 
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, ErrorMessage } from "formik";
+import './login.styles.css'
+import * as Yup from "yup";
+
 const LogIn = () => {
   const initialState = {
     email: "",
@@ -16,6 +19,14 @@ const LogIn = () => {
   };
 
   const [Login, setLogin] = useState(initialState);
+
+   const SignInSchema = Yup.object().shape({
+     email: Yup.string().email().required("Email is required"),
+     password: Yup.string()
+       .required("Password is required")
+       .min(4, "Password is too short - should be 4 chars minimum"),
+   });
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -62,81 +73,101 @@ const LogIn = () => {
 
 
   const classes = useStyles();
-  const { email, password } = Login;
   return (
-    <div style={{ marginTop: "30px" }}>
-      <div>
+    <div style={{ marginTop: "30px", width: "50%", display: "flex", justifyContent: "flex-end"}}>
+      <div style={{width: "50%"}}>
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
             Log In
           </Typography>
-          <Formik initialValues={Login}>
-            {
-              (formik) => {
-                const{
-                  values,
-                  handleChange,
-                  errors,
-                  handleBlur,
-                  touched,
-                  isValid,
-                  dirty
-                } = formik
+          <Formik
+            initialValues={Login}
+            onSubmit={handleSubmit}
+            validationSchema={SignInSchema}
+          >
+            {(formik) => {
+              const {
+                values,
+                handleChange,
+                errors,
+                handleBlur,
+                touched,
+                isValid,
+                dirty,
+              } = formik;
 
-                return (
-                  <div>
-                    <form
-                      className={classes.form}
-                      noValidate
-                      onSubmit={handleSubmit}
-                    >
-                      <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                          <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            value={email}
-                            onChange={handleChange}
-                            autoComplete="email"
-                            className="login-form"
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={handleChange}
-                            autoComplete="current-password"
-                            className="login-form"
-                          />
-                        </Grid>
+              return (
+                <div>
+                  <form
+                    className={classes.form}
+                    noValidate
+                    // onSubmit={handleSubmit}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="email"
+                          label="Email Address"
+                          name="email"
+                          value={values.email}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          autoComplete="email"
+                          className={
+                            errors.email ? "input-error" : null
+                          }
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="error"
+                        />
                       </Grid>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                      >
-                        Log In
-                      </Button>
-                    </form>
-                  </div>
-                );
-              }
-            }
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          name="password"
+                          label="Password"
+                          type="password"
+                          id="password"
+                          value={values.password}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          autoComplete="current-password"
+                          className={
+                            errors.password && touched.password
+                              ? "input-error"
+                              : null
+                          }
+                        />
+                        <ErrorMessage
+                          name="password"
+                          component="span"
+                          className="error"
+                        />
+                      </Grid>
+                    </Grid>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      className={dirty && isValid ? "" : "disabled-btn"}
+                      disabled={!(dirty && isValid)}
+                      style={{ marginTop: "30px" }}
+                    >
+                      Log In
+                    </Button>
+                  </form>
+                </div>
+              );
+            }}
           </Formik>
-          
         </div>
       </div>
     </div>

@@ -114,8 +114,8 @@ const SignUp = () => {
    
    const classes = useStyles();
     return (
-      <div style={{ display: "flex", justifyContent: "flex-end", width: "50%" }} className="sign-up">
-        <div style={{ width: "55%" }}>
+      <div  className="sign-up">
+        <div>
           <CssBaseline />
           <div className={classes.paper}>
             <Typography

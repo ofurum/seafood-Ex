@@ -5,6 +5,10 @@
  --text-color: #293241;
 }
 
+.sign-up {
+    width: 50%;
+    padding: 0 10%
+}
 
 .sign-up .input-error .MuiOutlinedInput-root > fieldset {
 	 border-color: var(--error-color)
